@@ -699,6 +699,7 @@ cc_wifi_panel_class_init (CcWifiPanelClass *klass)
   g_object_class_override_property (object_class, PROP_PARAMETERS, "parameters");
 }
 
+#include "contrib/network-agent.c"
 static void
 cc_wifi_panel_init (CcWifiPanel *self)
 {
@@ -717,6 +718,10 @@ cc_wifi_panel_init (CcWifiPanel *self)
 
   /* Load NetworkManager */
   self->client = cc_object_storage_get_object (CC_OBJECT_NMCLIENT);
+
+  ShellNetworkAgent *agent;
+  agent = network_agent_new (self->client);
+  g_object_set_data_full (G_OBJECT (self), "agent", agent, g_object_unref);
 
   g_signal_connect_object (self->client,
                            "device-added",

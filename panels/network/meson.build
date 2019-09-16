@@ -1,6 +1,8 @@
 deps = common_deps + network_manager_deps + [
   polkit_gobject_dep,
-  dependency('gmodule-2.0')
+  dependency('gmodule-2.0'),
+  dependency('libsecret-1'),
+  dependency('gcr-3'),
 ]
 
 network_inc = include_directories('.')
@@ -48,6 +50,7 @@ sources = files(
   'net-proxy.c',
   'net-vpn.c',
   'network-dialogs.c',
+  'contrib/shell-network-agent.c',
   'panel-common.c',
   'ui-helpers.c'
 )

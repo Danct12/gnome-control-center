@@ -37,6 +37,7 @@
     <child>
       <object class="GtkStack" id="stack">
         <property name="visible">True</property>
+        <property name="homogeneous">False</property>
         <property name="visible-child">no_users_box</property>
         <child>
           <object class="GtkOverlay" id="users_overlay">

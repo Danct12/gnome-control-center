@@ -150,6 +150,7 @@ sources = common_sources + files(
   'cc-crop-area.c',
   'cc-login-history-dialog.c',
   'cc-password-dialog.c',
+  'cc-password-dialog-private.c',
   'cc-user-image.c',
   'cc-user-panel.c',
   'run-passwd.c',

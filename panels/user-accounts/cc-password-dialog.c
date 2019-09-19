@@ -31,6 +31,7 @@
 #include <act/act.h>
 
 #include "cc-password-dialog.h"
+#include "cc-password-dialog-private.h"
 #include "cc-user-accounts-resources.h"
 #include "pw-utils.h"
 #include "run-passwd.h"
@@ -40,7 +41,7 @@
 
 struct _CcPasswordDialog
 {
-        GtkDialog           parent_instance;
+        HdyDialog           parent_instance;
 
         GtkBox             *action_radio_box;
         GtkRadioButton     *action_now_radio;
@@ -65,7 +66,7 @@ struct _CcPasswordDialog
         PasswdHandler      *passwd_handler;
 };
 
-G_DEFINE_TYPE (CcPasswordDialog, cc_password_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (CcPasswordDialog, cc_password_dialog, HDY_TYPE_DIALOG)
 
 static gint
 update_password_strength (CcPasswordDialog *self)
@@ -87,10 +88,12 @@ update_password_strength (CcPasswordDialog *self)
         gtk_level_bar_set_value (self->strength_indicator, strength_level);
         gtk_label_set_label (self->password_hint_label, hint);
 
-        if (strength_level > 1) {
+        strength_level = (strlen (password) >= MINIMUM_PASSCODE_LENGTH) + 1; /* Hack */
+
+        if (strlen (password) == 6) {
                 set_entry_validation_checkmark (self->password_entry);
-        } else if (strlen (password) == 0) {
-                set_entry_generation_icon (self->password_entry);
+        /* } else if (strlen (password) == 0) { */
+        /*         set_entry_generation_icon (self->password_entry); */
         } else {
                 clear_entry_validation_error (self->password_entry);
         }
@@ -208,6 +211,7 @@ update_sensitivity (CcPasswordDialog *self)
         if (self->password_mode == ACT_USER_PASSWORD_MODE_REGULAR) {
                 strength = update_password_strength (self);
                 can_change = strength > 1 && strcmp (password, verify) == 0 &&
+                             strlen (password) == 6 &&
                              (self->old_password_ok || !gtk_widget_get_visible (GTK_WIDGET (self->old_password_entry)));
         }
         else {
@@ -482,6 +486,8 @@ cc_password_dialog_class_init (CcPasswordDialogClass *klass)
         gtk_widget_class_bind_template_callback (widget_class, password_entry_icon_press_cb);
         gtk_widget_class_bind_template_callback (widget_class, password_entry_key_press_cb);
         gtk_widget_class_bind_template_callback (widget_class, verify_entry_changed);
+
+        gtk_widget_class_bind_template_callback (widget_class, cc_passcode_entry_text_inserted_cb);
 }
 
 static void

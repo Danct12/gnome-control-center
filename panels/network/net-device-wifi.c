@@ -991,6 +991,7 @@ ap_sort (gconstpointer a, gconstpointer b, gpointer data)
         return 0;
 }
 
+#include "connection-editor/cc-connection-editor.h"
 static void
 show_details_for_row (NetDeviceWifi *self, CcWifiConnectionRow *row, CcWifiConnectionList *list)
 {
@@ -1004,6 +1005,7 @@ show_details_for_row (NetDeviceWifi *self, CcWifiConnectionRow *row, CcWifiConne
         connection = cc_wifi_connection_row_get_connection (row);
         ap = cc_wifi_connection_row_best_access_point (row);
 
+#include "use-new-editor.c"
         editor = net_connection_editor_new (GTK_WINDOW (window), connection, self->device, ap, self->client);
         net_connection_editor_run (editor);
 }

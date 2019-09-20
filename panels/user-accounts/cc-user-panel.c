@@ -1436,7 +1436,7 @@ cc_user_panel_constructed (GObject *object)
         shell = cc_panel_get_shell (CC_PANEL (self));
         cc_shell_embed_widget_in_header (shell, GTK_WIDGET (self->add_user_button), GTK_POS_RIGHT);
 
-        cc_permission_infobar_set_permission (self->permission_infobar, self->permission);
+        /*cc_permission_infobar_set_permission (self->permission_infobar, self->permission);*/
 }
 
 static void

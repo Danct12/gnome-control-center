@@ -31,7 +31,7 @@
         <property name="orientation">vertical</property>
     <child>
       <object class="CcPermissionInfobar" id="permission_infobar">
-        <property name="visible">True</property>
+        <property name="visible">False</property>
       </object>
     </child>
     <child>

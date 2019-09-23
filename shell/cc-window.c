@@ -828,9 +828,9 @@ cc_window_constructed (GObject *object)
   /* After everything is loaded, select the last used panel, if any,
    * or the first visible panel */
   id = g_settings_get_string (self->settings, "last-panel");
-  if (id != NULL && cc_shell_model_has_panel (self->store, id))
+  /* if (id != NULL && cc_shell_model_has_panel (self->store, id))
     cc_panel_list_set_active_panel (self->panel_list, id);
-  else
+  else */
     cc_panel_list_activate (self->panel_list);
 
   g_signal_connect_swapped (self->panel_list,

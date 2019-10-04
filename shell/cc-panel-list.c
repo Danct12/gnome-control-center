@@ -397,6 +397,7 @@ static const gchar * const panel_order[] = {
   /* Main page */
   "wifi",
   "network",
+  "wwan",
   "mobile-broadband",
   "bluetooth",
   "background",

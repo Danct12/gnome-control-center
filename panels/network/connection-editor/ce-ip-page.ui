@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CeIpPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+
+    <child>
+      <object class="GtkListBox" id="auto_list_box">
+        <property name="visible">1</property>
+        <property name="margin-bottom">32</property>
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="frame" />
+        </style>
+
+        <!-- IP Method -->
+        <child>
+          <object class="HdyComboRow" id="ip_method_row">
+            <property name="visible">1</property>
+            <signal name="notify::selected-index" handler="ip_method_changed_cb" swapped="yes" />
+          </object>
+        </child>
+
+        <!-- Automatic DNS Row -->
+        <child>
+          <object class="CcListRow" id="auto_dns_row">
+            <property name="visible">1</property>
+            <property name="show-switch">1</property>
+            <property name="title" translatable="yes">Automatic DNS</property>
+            <signal name="notify::active" handler="ip_auto_row_changed_cb" object="CeIpPage" after="yes" swapped="yes" />
+          </object>
+        </child>
+
+        <!-- Automatic Route Row -->
+        <child>
+          <object class="CcListRow" id="auto_route_row">
+            <property name="visible">1</property>
+            <property name="sensitive" bind-source="auto_dns_row" bind-property="sensitive" />
+            <property name="show-switch">1</property>
+            <property name="title" translatable="yes">Automatic Routing</property>
+            <signal name="notify::active" handler="ip_auto_row_changed_cb" object="CeIpPage" after="yes" swapped="yes" />
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <!-- Manual IP title -->
+    <child>
+      <object class="GtkLabel" id="manual_title_label">
+        <property name="visible" bind-source="manual_list_box" bind-property="visible" />
+        <property name="margin-bottom">12</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes" context="network connection editor">Address</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+
+    <!-- Route Settings -->
+    <child>
+      <object class="GtkListBox" id="manual_list_box">
+        <property name="visible">0</property>
+        <property name="margin-bottom">32</property>
+        <property name="selection-mode">none</property>
+        <signal name="notify::visible" handler="ce_manual_entry_changed_cb" object="CeIpPage" swapped="yes" />
+        <style>
+          <class name="frame" />
+        </style>
+
+        <!-- Address row -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" context="network connection editor">Address</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="manual_address_entry">
+                    <property name="visible">1</property>
+                    <property name="halign">end</property>
+                    <signal name="changed" handler="ce_manual_entry_changed_cb" object="CeIpPage" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Netmask row -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Netmask</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="manual_netmask_entry">
+                    <property name="visible">1</property>
+                    <property name="halign">end</property>
+                    <signal name="changed" handler="ce_manual_entry_changed_cb" object="CeIpPage" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Gateway row -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Gateway</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="manual_gateway_entry">
+                    <property name="visible">1</property>
+                    <property name="halign">end</property>
+                    <signal name="changed" handler="ce_manual_entry_changed_cb" object="CeIpPage" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+
+    <!-- DNS settings title -->
+    <child>
+      <object class="GtkLabel" id="dns_title_label">
+        <property name="visible">1</property>
+        <property name="sensitive" bind-source="dns_list_box" bind-property="sensitive" />
+        <property name="margin-bottom">12</property>
+        <property name="halign">start</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+
+    <!-- DNS Settings -->
+    <child>
+      <object class="GtkListBox" id="dns_list_box">
+        <property name="visible">1</property>
+        <property name="margin-bottom">32</property>
+        <property name="selection-mode">none</property>
+        <signal name="row-activated" handler="dns_row_activated_cb" object="CeIpPage" swapped="yes" />
+        <style>
+         <class name="frame" />
+        </style>
+        <child>
+          <object class="GtkListBoxRow" id="add_dns_row">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">1</property>
+                <property name="margin">12</property>
+                <property name="halign">center</property>
+                <property name="label" translatable="yes">Add DNS Server...</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <!-- Route title -->
+    <child>
+      <object class="GtkLabel" id="route_title_label">
+        <property name="visible">1</property>
+        <property name="sensitive" bind-source="dns_list_box" bind-property="sensitive" />
+        <property name="margin-bottom">12</property>
+        <property name="halign">start</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+
+    <!-- Route Settings -->
+    <child>
+      <object class="GtkListBox" id="route_list_box">
+        <property name="visible">1</property>
+        <property name="sensitive" bind-source="dns_list_box" bind-property="sensitive" />
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="frame" />
+        </style>
+
+        <!-- Address row -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" context="network connection editor">Address</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="route_address_entry">
+                    <property name="visible">1</property>
+                    <property name="halign">end</property>
+                    <signal name="changed" handler="ce_route_entry_changed_cb" object="CeIpPage" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Netmask row -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Netmask</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="route_netmask_entry">
+                    <property name="visible">1</property>
+                    <property name="halign">end</property>
+                    <signal name="changed" handler="ce_route_entry_changed_cb" object="CeIpPage" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Gateway row -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Gateway</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="route_gateway_entry">
+                    <property name="visible">1</property>
+                    <property name="halign">end</property>
+                    <signal name="changed" handler="ce_route_entry_changed_cb" object="CeIpPage" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Metric row -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible">1</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Metric</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="route_metric_entry">
+                    <property name="visible">1</property>
+                    <property name="halign">end</property>
+                    <signal name="changed" handler="ce_route_entry_changed_cb" object="CeIpPage" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+
+  </template>
+
+  <object class="GtkDialog" id="add_dns_dialog">
+    <property name="visible">0</property>
+    <property name="modal">1</property>
+    <property name="use-header-bar">1</property>
+    <property name="default-height">24</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="border-width">0</property>
+        <property name="margin-top">18</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">1</property>
+            <property name="margin-bottom">18</property>
+            <property name="wrap">1</property>
+            <property name="max-width-chars">35</property>
+            <property name="xalign">0.0</property>
+            <property name="label" translatable="yes">Add a custom Domain Name System (DNS) server for resolving IP Addresses.</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="dns_entry">
+            <property name="visible">1</property>
+            <signal name="changed" handler="ce_dns_entry_changed_cb" object="CeIpPage" swapped="yes" />
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <!-- Add button -->
+    <child type="action">
+      <object class="GtkButton" id="add_button">
+        <property name="visible">1</property>
+        <property name="sensitive">0</property>
+        <property name="can-default">1</property>
+        <property name="use-underline">1</property>
+        <property name="label" translatable="yes">_Add</property>
+      </object>
+    </child>
+
+    <!-- Cancel button -->
+    <child type="action">
+      <object class="GtkButton" id="cancel_button">
+        <property name="visible">1</property>
+        <property name="use-underline">1</property>
+        <property name="label" translatable="yes">_Cancel</property>
+      </object>
+    </child>
+
+    <action-widgets>
+      <action-widget response="apply" default="true">add_button</action-widget>
+      <action-widget response="cancel">cancel_button</action-widget>
+    </action-widgets>
+  </object>
+</interface>

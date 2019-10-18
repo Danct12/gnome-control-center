@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CcConnectionEditor" parent="HdyDialog">
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <property name="default-width">360</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">1</property>
+
+        <!-- Back button -->
+        <child>
+          <object class="GtkButton" id="back_button">
+            <property name="visible">1</property>
+            <signal name="clicked" handler="editor_cancel_clicked_cb" swapped="yes"/>
+            <child internal-child="accessible">
+              <object class="AtkObject">
+                <property name="accessible-name" translatable="yes">Back</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">1</property>
+                <property name="icon-name">go-previous-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Cancel button -->
+        <child>
+          <object class="GtkButton" id="cancel_button">
+            <property name="visible" bind-source="back_button" bind-property="visible" bind-flags="invert-boolean|bidirectional" />
+            <property name="use-underline">1</property>
+            <property name="label" translatable="yes">_Cancel</property>
+            <signal name="clicked" handler="editor_cancel_clicked_cb" swapped="yes"/>
+          </object>
+        </child>
+
+        <!-- Apply button -->
+        <child>
+          <object class="GtkButton" id="apply_button">
+            <property name="visible">0</property>
+            <property name="sensitive">0</property>
+            <property name="can-default">1</property>
+            <property name="use-underline">1</property>
+            <property name="label" translatable="yes">_Apply</property>
+            <signal name="clicked" handler="editor_apply_clicked_cb" swapped="yes"/>
+            <style>
+              <class name="default" />
+            </style>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+
+      </object>
+    </child>
+
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="border-width">0</property>
+
+        <child>
+          <object class="GtkScrolledWindow" id="main_view">
+            <property name="visible">1</property>
+            <property name="vexpand">1</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="min-content-height">400</property>
+            <child>
+              <object class="HdyColumn">
+                <property name="visible">1</property>
+                <property name="maximum-width">600</property>
+                <property name="linear-growth-width">400</property>
+                <property name="margin-top">32</property>
+                <property name="margin-bottom">32</property>
+
+                <child>
+                  <object class="GtkStack" id="main_stack">
+                    <property name="visible">1</property>
+                    <property name="transition-type">slide-left-right</property>
+                    <property name="homogeneous">0</property>
+                    <signal name="notify::visible-child" handler="editor_visible_child_changed_cb" swapped="yes" />
+
+                    <child>
+                      <object class="GtkBox" id="main_page">
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="visible">1</property>
+                        <property name="orientation">vertical</property>
+
+                        <!-- Details -->
+                        <child>
+                          <object class="GtkListBox" id="details_box">
+                            <property name="visible">1</property>
+                            <property name="valign">start</property>
+                            <property name="margin-bottom">32</property>
+                            <property name="selection-mode">none</property>
+                            <signal name="row-activated" handler="editor_row_activated_cb" object="CcConnectionEditor" swapped="yes" />
+                            <style>
+                              <class name="frame" />
+                            </style>
+
+                            <!-- Signal Strength row -->
+                            <child>
+                              <object class="CcListRow" id="signal_row">
+                                <property name="visible">0</property>
+                                <property name="title" translatable="yes">Signal Strength</property>
+                              </object>
+                            </child>
+
+                            <!-- Frequency row -->
+                            <child>
+                              <object class="CcListRow" id="frequency_row">
+                                <property name="visible">0</property>
+                                <property name="title" translatable="yes">Frequency</property>
+                              </object>
+                            </child>
+
+                            <!-- Default Route row -->
+                            <child>
+                              <object class="CcListRow" id="route_row">
+                                <property name="visible">1</property>
+                                <property name="title" translatable="yes">Default Route</property>
+                              </object>
+                            </child>
+
+                            <!-- Last Used row -->
+                            <child>
+                              <object class="CcListRow" id="last_used_row">
+                                <property name="visible">0</property>
+                                <property name="title" translatable="yes">Last Used</property>
+                              </object>
+                            </child>
+
+                            <!-- Details row -->
+                            <child>
+                              <object class="CcListRow" id="details_row">
+                                <property name="visible">1</property>
+                                <property name="title" translatable="yes">Details</property>
+                                <property name="icon-name">go-next-symbolic</property>
+                              </object>
+                            </child>
+
+                          </object>
+                        </child>
+
+                        <!-- Misc. Switches -->
+                        <child>
+                          <object class="GtkListBox" id="switch_box">
+                            <property name="visible">1</property>
+                            <property name="valign">start</property>
+                            <property name="margin-bottom">32</property>
+                            <property name="selection-mode">none</property>
+                            <style>
+                              <class name="frame" />
+                            </style>
+
+                            <!-- Connect Automatically row -->
+                            <child>
+                              <object class="CcListRow" id="auto_connect_row">
+                                <property name="visible">1</property>
+                                <property name="show-switch">1</property>
+                                <property name="title" translatable="yes">Connect Automatically</property>
+                                <signal name="notify::active" handler="editor_row_changed_cb" swapped="yes" />
+                              </object>
+                            </child>
+
+                            <!-- Allow Others row -->
+                            <child>
+                              <object class="CcListRow" id="allow_others_row">
+                                <property name="visible">1</property>
+                                <property name="show-switch">1</property>
+                                <property name="title" translatable="yes">Available to other users</property>
+                                <signal name="notify::active" handler="editor_row_changed_cb" swapped="yes" />
+                              </object>
+                            </child>
+
+                            <!-- Metered connection row -->
+                            <child>
+                              <object class="CcListRow" id="metered_row">
+                                <property name="visible">1</property>
+                                <property name="show-switch">1</property>
+                                <property name="title" translatable="yes">Metered connection</property>
+                                <property name="subtitle" translatable="yes">Limit background data</property>
+                                <signal name="notify::active" handler="editor_row_changed_cb" swapped="yes" />
+                              </object>
+                            </child>
+
+                          </object>
+                        </child>
+
+                        <!-- Advanced settings -->
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">1</property>
+                            <property name="margin-bottom">12</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Advanced Settings</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkListBox" id="advanced_box">
+                            <property name="visible">1</property>
+                            <property name="valign">start</property>
+                            <property name="margin-bottom">32</property>
+                            <property name="selection-mode">none</property>
+                            <signal name="row-activated" handler="editor_row_activated_cb" object="CcConnectionEditor" swapped="yes" />
+                            <style>
+                             <class name="frame" />
+                            </style>
+
+                            <!-- IPv4 row -->
+                            <child>
+                              <object class="CcListRow" id="ip4_row">
+                                <property name="visible">1</property>
+                                <property name="title" translatable="yes">IPv4</property>
+                                <property name="icon-name">go-next-symbolic</property>
+                              </object>
+                            </child>
+
+                            <!-- IPv6 row -->
+                            <child>
+                              <object class="CcListRow" id="ip6_row">
+                                <property name="visible">1</property>
+                                <property name="title" translatable="yes">IPv6</property>
+                                <property name="icon-name">go-next-symbolic</property>
+                              </object>
+                            </child>
+
+                            <!-- Security row -->
+                            <child>
+                              <object class="CcListRow" id="security_row">
+                                <property name="visible">1</property>
+                                <property name="title" translatable="yes">Security</property>
+                                <property name="icon-name">go-next-symbolic</property>
+                              </object>
+                            </child>
+
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkButton" id="delete_button">
+                            <property name="visible">1</property>
+                            <property name="can-default">1</property>
+                            <property name="use-underline">1</property>
+                            <property name="label" translatable="yes">_Forget this Network</property>
+                            <signal name="clicked" handler="editor_delete_clicked_cb" swapped="yes" />
+                            <style>
+                              <class name="destructive-action" />
+                            </style>
+                          </object>
+                        </child>
+
+                      </object>
+                      <packing>
+                        <property name="name">main-view</property>
+                      </packing>
+                    </child>
+
+                    <!-- Details Page -->
+                    <child>
+                      <object class="CeDetailsPage" id="details_page">
+                        <property name="visible">1</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                      </object>
+                    </child>
+
+                    <!-- IPv4 Page -->
+                    <child>
+                      <object class="CeIpPage" id="ip4_page">
+                        <property name="visible">1</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <signal name="changed" handler="editor_settings_changed_cb" object="CcConnectionEditor" swapped="yes" />
+                      </object>
+                    </child>
+
+                    <!-- IPv6 Page -->
+                    <child>
+                      <object class="CeIpPage" id="ip6_page">
+                        <property name="visible">1</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <signal name="changed" handler="editor_settings_changed_cb" object="CcConnectionEditor" swapped="yes" />
+                      </object>
+                    </child>
+
+                    <!-- Security Page -->
+                    <child>
+                      <object class="CeSecurityPage" id="security_page">
+                        <property name="visible">1</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <signal name="changed" handler="editor_settings_changed_cb" object="CcConnectionEditor" swapped="yes" />
+                      </object>
+                    </child>
+
+                  </object>
+                </child>
+
+              </object>
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </template>
+</interface>

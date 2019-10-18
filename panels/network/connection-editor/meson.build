@@ -1,6 +1,11 @@
 name = 'connection-editor'
 
 sources = files(
+  'cc-connection-editor.c',
+  'ce-security-page.c',
+  'ce-details-page.c',
+  'ce-ip-page.c',
+  'ce-password-row.c',
   'ce-page-8021x-security.c',
   'ce-page-details.c',
   'ce-page-ethernet.c',
@@ -16,6 +21,11 @@ sources = files(
 )
 
 resource_data = files(
+  'cc-connection-editor.ui',
+  'ce-security-page.ui',
+  'ce-details-page.ui',
+  'ce-ip-page.ui',
+  'ce-password-row.ui',
   '8021x-security-page.ui',
   'connection-editor.ui',
   'details-page.ui',

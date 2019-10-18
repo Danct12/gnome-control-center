@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CeSecurityPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkListBox" id="main_list_box">
+        <property name="visible">1</property>
+        <property name="margin-bottom">32</property>
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="frame" />
+        </style>
+
+        <!-- Connection List -->
+        <child>
+          <object class="HdyComboRow" id="connection_list_row">
+            <property name="visible">0</property>
+            <property name="title" translatable="yes">Connection</property>
+            <signal name="notify::selected-index" handler="connection_list_item_changed_cb" swapped="yes" />
+          </object>
+        </child>
+
+        <!-- Network Name -->
+        <child>
+          <object class="GtkListBoxRow">
+            <property name="visible" bind-source="connection_list_row" bind-property="visible" bind-flags="sync-create" />
+            <child>
+              <object class="GtkBox" id="name_box">
+                <property name="visible">1</property>
+                <property name="margin">12</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Network Name</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="name_entry">
+                    <property name="visible">1</property>
+                    <signal name="changed" handler="security_page_modified_cb" swapped="yes" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Security Method -->
+        <child>
+          <object class="HdyComboRow" id="security_method_row">
+            <property name="visible">1</property>
+            <property name="sensitive" bind-source="name_box" bind-property="sensitive"/>
+            <property name="title" translatable="yes">Security</property>
+            <signal name="notify::selected-index" handler="security_page_modified_cb" swapped="yes" />
+          </object>
+        </child>
+
+        <!-- WPA/WPA2 Personal -->
+        <child>
+          <object class="CePasswordRow" id="wpa_password_row">
+            <property name="visible">0</property>
+            <property name="sensitive" bind-source="name_box" bind-property="sensitive" />
+            <signal name="changed" handler="security_page_modified_cb" swapped="yes" />
+          </object>
+        </child>
+
+        <!-- WEP -->
+        <child>
+          <object class="CePasswordRow" id="wep_password_row">
+            <property name="visible">0</property>
+            <property name="sensitive" bind-source="name_box" bind-property="sensitive" />
+            <signal name="changed" handler="security_page_modified_cb" swapped="yes" />
+          </object>
+        </child>
+
+        <!-- WEP index -->
+        <child>
+          <object class="HdyComboRow" id="wep_index_row">
+            <property name="visible" bind-source="wep_password_row" bind-property="visible" />
+            <property name="sensitive" bind-source="name_box" bind-property="sensitive" />
+            <property name="title" translatable="yes">WEP index</property>
+            <signal name="notify::selected-index" handler="wep_index_changed_cb" swapped="yes" />
+          </object>
+        </child>
+
+        <!-- WEP Authentication -->
+        <child>
+          <object class="HdyComboRow" id="wep_authentication_row">
+            <property name="visible" bind-source="wep_password_row" bind-property="visible" />
+            <property name="sensitive" bind-source="name_box" bind-property="sensitive" />
+            <property name="title" translatable="yes">WEP Authentication</property>
+            <signal name="notify::selected-index" handler="wep_authentication_changed_cb" swapped="yes" />
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </template>
+</interface>

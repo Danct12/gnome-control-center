@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CeDetailsPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+
+    <child>
+      <object class="GtkListBox" id="list_box">
+        <property name="visible">1</property>
+        <property name="selection-mode">none</property>
+        <signal name="row-activated" handler="details_row_activated_cb" swapped="yes" />
+        <style>
+          <class name="frame" />
+        </style>
+
+        <!-- Link Speed Row -->
+        <child>
+          <object class="CcListRow" id="speed_row">
+            <property name="visible">1</property>
+            <property name="can-focus">0</property>
+            <property name="activatable">0</property>
+            <property name="title" translatable="yes">Link Speed</property>
+          </object>
+        </child>
+
+        <!-- DNS Servers row -->
+        <child>
+          <object class="CcListRow" id="dns_row">
+            <property name="visible">1</property>
+            <property name="can-focus">0</property>
+            <property name="activatable">0</property>
+            <property name="title" translatable="yes">DNS Servers</property>
+          </object>
+        </child>
+
+        <!-- IPv4 row -->
+        <child>
+          <object class="CcListRow" id="ipv4_row">
+            <property name="visible">1</property>
+            <property name="can-focus">0</property>
+            <property name="activatable">0</property>
+            <property name="title" translatable="yes">IPv4 Address</property>
+          </object>
+        </child>
+
+        <!-- IPv6 row -->
+        <child>
+          <object class="CcListRow" id="ipv6_row">
+            <property name="visible">1</property>
+            <property name="can-focus">0</property>
+            <property name="activatable">0</property>
+            <property name="title" translatable="yes">IPv6 Address</property>
+          </object>
+        </child>
+
+        <!-- Network Name row -->
+        <child>
+          <object class="CcListRow" id="network_name_row">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">Network Name</property>
+            <property name="icon-name">go-next-symbolic</property>
+          </object>
+        </child>
+
+        <!-- BSSID row -->
+        <child>
+          <object class="CcListRow" id="bssid_row">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">Access Point</property>
+            <property name="subtitle" translatable="yes">BSSID</property>
+            <property name="icon-name">go-next-symbolic</property>
+          </object>
+        </child>
+
+        <!-- MAC row -->
+        <child>
+          <object class="CcListRow" id="mac_row">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">Hardware Address</property>
+            <property name="subtitle" translatable="yes">MAC Address</property>
+            <property name="icon-name">go-next-symbolic</property>
+          </object>
+        </child>
+
+        <!-- Cloned MAC row -->
+        <child>
+          <object class="CcListRow" id="cloned_mac_row">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">Cloned Address</property>
+            <property name="subtitle" translatable="yes">MAC Address</property>
+            <property name="icon-name">go-next-symbolic</property>
+          </object>
+        </child>
+
+      </object>
+    </child>
+
+  </template>
+  <object class="HdyDialog" id="edit_dialog">
+    <property name="visible">0</property>
+    <property name="modal">1</property>
+    <property name="use-header-bar">1</property>
+    <property name="default-height">24</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="border-width">0</property>
+        <property name="margin-top">18</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-bottom">18</property>
+        <child>
+          <object class="GtkLabel" id="dialog_label">
+            <property name="visible">1</property>
+            <property name="margin-bottom">18</property>
+            <property name="wrap">1</property>
+            <property name="max-width-chars">35</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="dialog_entry">
+            <property name="visible">1</property>
+            <signal name="changed" handler="details_value_changed_cb" swapped="yes" />
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="dialog_combo_box">
+            <property name="visible" bind-source="dialog_entry" bind-property="visible" bind-flags="invert-boolean" />
+            <property name="has-entry">1</property>
+            <signal name="changed" handler="details_value_changed_cb" swapped="yes" />
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <!-- Apply button -->
+    <child type="action">
+      <object class="GtkButton" id="apply_button">
+        <property name="visible">1</property>
+        <property name="sensitive">0</property>
+        <property name="can-default">1</property>
+        <property name="use-underline">1</property>
+        <property name="label" translatable="yes">_Apply</property>
+      </object>
+    </child>
+
+    <!-- Cancel button -->
+    <child type="action">
+      <object class="GtkButton" id="cancel_button">
+        <property name="visible">1</property>
+        <property name="use-underline">1</property>
+        <property name="label" translatable="yes">_Cancel</property>
+      </object>
+    </child>
+
+    <action-widgets>
+      <action-widget response="apply" default="true">apply_button</action-widget>
+      <action-widget response="cancel">cancel_button</action-widget>
+    </action-widgets>
+  </object>
+</interface>

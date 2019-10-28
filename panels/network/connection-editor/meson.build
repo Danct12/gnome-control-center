@@ -10,6 +10,7 @@ sources = files(
   'ce-page-vpn.c',
   'ce-page-wifi.c',
   'ce-page.c',
+  'cc-hidden-wifi-dialog.c',
   'net-connection-editor.c',
   'vpn-helpers.c'
 )
@@ -23,7 +24,8 @@ resource_data = files(
   'ip6-page.ui',
   'security-page.ui',
   'vpn-page.ui',
-  'wifi-page.ui'
+  'wifi-page.ui',
+  'cc-hidden-wifi-dialog.ui',
 )
 
 c_name = 'net-' + name

@@ -397,7 +397,7 @@ connect_hidden_button_clicked_cb (NetDeviceWifi *self)
         GtkWidget *toplevel;
 
         toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
-        cc_network_panel_connect_to_hidden_network (toplevel, self->client);
+        cc_network_panel_connect_to_hidden_network (toplevel, self->client, self->device);
 }
 
 static void

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CcHiddenWifiDialog" parent="HdyDialog">
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <property name="default-width">360</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">1</property>
+
+        <!-- Cancel button -->
+        <child>
+          <object class="GtkButton" id="cancel_button">
+            <property name="visible">1</property>
+            <property name="use-underline">1</property>
+            <property name="label" translatable="yes">_Cancel</property>
+          </object>
+        </child>
+
+        <!-- Connect button -->
+        <child>
+          <object class="GtkButton" id="connect_button">
+            <property name="visible">1</property>
+            <property name="use-underline">1</property>
+            <property name="can-default">1</property>
+            <property name="sensitive">0</property>
+            <property name="label" translatable="yes">C_onnect</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+
+      </object>
+    </child>
+
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="border-width">0</property>
+
+        <child>
+          <object class="GtkScrolledWindow" id="main_view">
+            <property name="visible">1</property>
+            <property name="vexpand">1</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="min-content-height">400</property>
+            <child>
+              <object class="HdyColumn">
+                <property name="visible">1</property>
+                <property name="maximum-width">600</property>
+                <property name="linear-growth-width">400</property>
+                <property name="margin-top">32</property>
+                <property name="margin-bottom">32</property>
+
+                <child>
+                  <object class="GtkBox" id="main_page">
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="visible">1</property>
+                    <property name="orientation">vertical</property>
+                    <!-- Security Page -->
+                    <child>
+                      <object class="CeSecurityPage" id="security_page">
+                        <property name="visible">1</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="allow-create">1</property>
+                        <signal name="changed" handler="hidden_wifi_settings_changed_cb" swapped="yes" />
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+              </object> <!-- ./HdyColumn -->
+            </child>
+          </object>
+        </child>
+
+      </object>
+    </child>
+
+    <action-widgets>
+      <action-widget response="ok" default="true">connect_button</action-widget>
+      <action-widget response="cancel">cancel_button</action-widget>
+    </action-widgets>
+
+  </template>
+</interface>

@@ -334,7 +334,7 @@ handle_argv_for_device (CcWifiPanel *self, NetDeviceWifi *net_device)
     }
   else if (self->arg_operation == OPERATION_CONNECT_HIDDEN)
     {
-      cc_network_panel_connect_to_hidden_network (toplevel, self->client);
+      cc_network_panel_connect_to_hidden_network (toplevel, self->client, device);
       ret = TRUE;
     }
   else if (g_str_equal (nm_object_get_path (NM_OBJECT (device)), self->arg_device))

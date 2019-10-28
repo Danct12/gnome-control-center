@@ -26,7 +26,8 @@ void cc_network_panel_create_wifi_network (GtkWidget        *toplevel,
 					   NMClient         *client);
 
 void cc_network_panel_connect_to_hidden_network (GtkWidget        *toplevel,
-						 NMClient         *client);
+						 NMClient         *client,
+                                                 NMDevice         *device);
 
 void cc_network_panel_connect_to_8021x_network (GtkWidget        *toplevel,
                                                 NMClient         *client,

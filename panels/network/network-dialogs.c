@@ -206,6 +206,9 @@ cc_network_panel_create_wifi_network (GtkWidget        *toplevel,
   }
 }
 
+#include "connection-editor/cc-hidden-wifi-dialog.h"
+#include "hidden-wifi-helper.h"
+#if 0
 void
 cc_network_panel_connect_to_hidden_network (GtkWidget        *toplevel,
                                             NMClient         *client)
@@ -214,6 +217,7 @@ cc_network_panel_connect_to_hidden_network (GtkWidget        *toplevel,
         show_wireless_dialog (toplevel, client,
                               nma_wifi_dialog_new_for_hidden (client));
 }
+#endif
 
 void
 cc_network_panel_connect_to_8021x_network (GtkWidget        *toplevel,

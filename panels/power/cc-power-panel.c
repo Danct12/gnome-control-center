@@ -1743,6 +1743,7 @@ add_brightness_row (CcPowerPanel  *self,
   row = no_prelight_row_new ();
   gtk_widget_show (row);
   box = row_box_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (box), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (row), box);
   title = row_title_new (text, NULL, &label);
   gtk_box_pack_start (GTK_BOX (box), title, FALSE, TRUE, 0);
@@ -1865,7 +1866,7 @@ add_power_saving_section (CcPowerPanel *self)
   self->brightness_row = row;
 
   gtk_container_add (GTK_CONTAINER (widget), row);
-  gtk_size_group_add_widget (self->row_sizegroup, row);
+  /* gtk_size_group_add_widget (self->row_sizegroup, row); */
 
   /* ambient light sensor */
   self->iio_proxy_watch_id =

@@ -58,7 +58,7 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="margin_bottom">8</property>
                 <property name="margin_top">8</property>
                 <property name="valign">center</property>

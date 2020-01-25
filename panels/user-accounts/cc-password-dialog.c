@@ -90,7 +90,7 @@ update_password_strength (CcPasswordDialog *self)
 
         strength_level = (strlen (password) >= MINIMUM_PASSCODE_LENGTH) + 1; /* Hack */
 
-        if (strlen (password) == 6) {
+        if (strlen (password) >= 6) {
                 set_entry_validation_checkmark (self->password_entry);
         /* } else if (strlen (password) == 0) { */
         /*         set_entry_generation_icon (self->password_entry); */
@@ -211,7 +211,7 @@ update_sensitivity (CcPasswordDialog *self)
         if (self->password_mode == ACT_USER_PASSWORD_MODE_REGULAR) {
                 strength = update_password_strength (self);
                 can_change = strength > 1 && strcmp (password, verify) == 0 &&
-                             strlen (password) == 6 &&
+                             strlen (password) >= 6 &&
                              (self->old_password_ok || !gtk_widget_get_visible (GTK_WIDGET (self->old_password_entry)));
         }
         else {

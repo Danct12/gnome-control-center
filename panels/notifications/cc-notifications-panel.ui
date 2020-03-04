@@ -42,7 +42,7 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="selection_mode">none</property>
-                            <property name="activate_on_single_click">False</property>
+                            <property name="activate_on_single_click">True</property>
                             <signal name="keynav-failed" handler="keynav_failed" object="CcNotificationsPanel" swapped="yes" />
                             <child>
                               <object class="GtkListBoxRow">
@@ -93,6 +93,14 @@
                                     </child>
                                   </object>
                                 </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="HdyComboRow" id="feedback_combo_row">
+                                <property name="visible">True</property>
+                                <property name="title" translatable="yes">Notification Feedback</property>
+                                <property name="subtitle" translatable="yes">What happens when notifications come in</property>
+                                <signal name="notify::selected-index" handler="feedback_row_changed_cb" swapped="yes"/>
                               </object>
                             </child>
                             <child>

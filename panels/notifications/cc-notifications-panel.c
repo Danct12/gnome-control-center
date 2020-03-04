@@ -38,6 +38,7 @@ struct _CcNotificationsPanel {
   CcPanel            parent_instance;
 
   GtkListBox        *app_listbox;
+  HdyComboRow       *feedback_combo_row;
   GtkSwitch         *lock_screen_switch;
   GtkScrolledWindow *main_scrolled_window;
   GtkBox            *main_box;
@@ -46,6 +47,7 @@ struct _CcNotificationsPanel {
   GtkSizeGroup      *sizegroup1;
 
   GSettings         *master_settings;
+  GSettings         *feedback_settings;
 
   GCancellable      *cancellable;
 
@@ -73,6 +75,12 @@ typedef struct {
   CcNotificationsPanel *panel;
 } Application;
 
+enum {
+  NOTIFICATION_SOUND_AND_VIBRATION = 0,
+  NOTIFICATION_VIBRATION_ONLY = 1,
+  NOTIFICATION_SILENT = 2
+};
+
 static void build_app_store (CcNotificationsPanel *panel);
 static void select_app      (CcNotificationsPanel *panel, GtkListBoxRow *row);
 static int  sort_apps       (gconstpointer one, gconstpointer two, gpointer user_data);
@@ -85,6 +93,7 @@ cc_notifications_panel_dispose (GObject *object)
   CcNotificationsPanel *panel = CC_NOTIFICATIONS_PANEL (object);
 
   g_clear_object (&panel->master_settings);
+  g_clear_object (&panel->feedback_settings);
   g_clear_pointer (&panel->known_applications, g_hash_table_unref);
   g_clear_pointer (&panel->sections, g_list_free);
   g_clear_pointer (&panel->sections_reverse, g_list_free);
@@ -165,6 +174,92 @@ on_perm_store_ready (GObject *source_object,
 }
 
 static void
+feedback_row_changed_cb (CcNotificationsPanel *panel)
+{
+  const char *value;
+  gint index;
+
+  if (!panel->feedback_settings)
+    return;
+
+  index = hdy_combo_row_get_selected_index (panel->feedback_combo_row);
+
+  if (index == NOTIFICATION_SILENT)
+    value = "quiet";
+  else if (index == NOTIFICATION_VIBRATION_ONLY)
+    value = "silent";
+  else
+    value = "full";
+
+  g_settings_set_string (panel->feedback_settings, "profile", value);
+}
+
+static void
+do_not_disturb_changed_cb (CcNotificationsPanel *panel)
+{
+  gboolean active;
+  gint index;
+
+  if (!panel->feedback_settings)
+    return;
+
+  active = gtk_switch_get_active (panel->dnd_switch);
+  index = hdy_combo_row_get_selected_index (panel->feedback_combo_row);
+
+  if (active && index != NOTIFICATION_SILENT)
+    hdy_combo_row_set_selected_index (panel->feedback_combo_row, NOTIFICATION_SILENT);
+}
+
+static void
+notifications_row_init (CcNotificationsPanel *panel)
+{
+  GSettingsSchemaSource *schema_source;
+  g_autoptr(GSettingsSchema) schema = NULL;
+  GListStore *list_store;
+  HdyValueObject *obj;
+  g_autofree char *value = NULL;
+  gint index;
+
+  list_store = g_list_store_new (HDY_TYPE_VALUE_OBJECT);
+
+  obj = hdy_value_object_new_string (_("Sound and Vibration"));
+  g_list_store_insert (list_store, NOTIFICATION_SOUND_AND_VIBRATION, obj);
+  g_clear_object (&obj);
+
+  obj = hdy_value_object_new_string (_("Vibration only"));
+  g_list_store_insert (list_store, NOTIFICATION_VIBRATION_ONLY, obj);
+  g_clear_object (&obj);
+
+  obj = hdy_value_object_new_string (_("Silent"));
+  g_list_store_insert (list_store, NOTIFICATION_SILENT, obj);
+  g_clear_object (&obj);
+
+  hdy_combo_row_bind_name_model (panel->feedback_combo_row, G_LIST_MODEL (list_store),
+                                 (HdyComboRowGetNameFunc) hdy_value_object_dup_string,
+                                 NULL, NULL);
+
+  schema_source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (schema_source, "org.sigxcpu.feedbackd", FALSE);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (panel->feedback_combo_row), schema != NULL);
+
+  if (!schema)
+    return;
+
+  panel->feedback_settings = g_settings_new ("org.sigxcpu.feedbackd");
+  value = g_settings_get_string (panel->feedback_settings, "profile");
+
+  if (g_str_equal (value, "silent"))
+    index = NOTIFICATION_VIBRATION_ONLY;
+  else if (g_str_equal (value, "quiet"))
+    index = NOTIFICATION_SILENT;
+  else
+    index = 0;
+
+  hdy_combo_row_set_selected_index (panel->feedback_combo_row, index);
+}
+
+static void
 cc_notifications_panel_init (CcNotificationsPanel *panel)
 {
   g_resources_register (cc_notifications_get_resource ());
@@ -176,9 +271,13 @@ cc_notifications_panel_init (CcNotificationsPanel *panel)
 
   panel->master_settings = g_settings_new (MASTER_SCHEMA);
 
+  notifications_row_init (panel);
   g_settings_bind (panel->master_settings, "show-banners",
                    panel->dnd_switch,
                    "active", G_SETTINGS_BIND_INVERT_BOOLEAN);
+  g_signal_connect_object (panel->dnd_switch, "notify::active",
+                           G_CALLBACK (do_not_disturb_changed_cb), panel,
+                           G_CONNECT_SWAPPED);
   g_settings_bind (panel->master_settings, "show-in-lock-screen",
                    panel->lock_screen_switch,
                    "active", G_SETTINGS_BIND_DEFAULT);
@@ -237,6 +336,7 @@ cc_notifications_panel_class_init (CcNotificationsPanelClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/control-center/notifications/cc-notifications-panel.ui");
 
   gtk_widget_class_bind_template_child (widget_class, CcNotificationsPanel, app_listbox);
+  gtk_widget_class_bind_template_child (widget_class, CcNotificationsPanel, feedback_combo_row);
   gtk_widget_class_bind_template_child (widget_class, CcNotificationsPanel, lock_screen_switch);
   gtk_widget_class_bind_template_child (widget_class, CcNotificationsPanel, main_scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, CcNotificationsPanel, main_box);
@@ -246,6 +346,7 @@ cc_notifications_panel_class_init (CcNotificationsPanelClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, keynav_failed);
   gtk_widget_class_bind_template_callback (widget_class, select_app);
+  gtk_widget_class_bind_template_callback (widget_class, feedback_row_changed_cb);
 }
 
 static inline GQuark

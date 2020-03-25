@@ -185,9 +185,9 @@ feedback_row_changed_cb (CcNotificationsPanel *panel)
   index = hdy_combo_row_get_selected_index (panel->feedback_combo_row);
 
   if (index == NOTIFICATION_SILENT)
-    value = "quiet";
-  else if (index == NOTIFICATION_VIBRATION_ONLY)
     value = "silent";
+  else if (index == NOTIFICATION_VIBRATION_ONLY)
+    value = "quiet";
   else
     value = "full";
 
@@ -250,9 +250,9 @@ notifications_row_init (CcNotificationsPanel *panel)
   value = g_settings_get_string (panel->feedback_settings, "profile");
 
   if (g_str_equal (value, "silent"))
-    index = NOTIFICATION_VIBRATION_ONLY;
-  else if (g_str_equal (value, "quiet"))
     index = NOTIFICATION_SILENT;
+  else if (g_str_equal (value, "quiet"))
+    index = NOTIFICATION_VIBRATION_ONLY;
   else
     index = 0;
 

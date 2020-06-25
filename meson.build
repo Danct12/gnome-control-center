@@ -239,9 +239,9 @@ config_h.set('BUILD_BLUETOOTH', host_is_linux_not_s390,
              description: 'Define to 1 to build the Bluetooth panel')
 config_h.set('HAVE_BLUETOOTH', host_is_linux_not_s390,
              description: 'Define to 1 if bluetooth support is available')
-config_h.set('BUILD_WACOM', host_is_linux_not_s390,
+config_h.set('BUILD_WACOM', false,
              description: 'Define to 1 to build the Wacom panel')
-config_h.set('HAVE_WACOM', host_is_linux_not_s390,
+config_h.set('HAVE_WACOM', false,
              description: 'Define to 1 if Wacom is supportted')
 config_h.set('BUILD_THUNDERBOLT', host_is_linux_not_s390,
              description: 'Define to 1 to build the Thunderbolt panel')

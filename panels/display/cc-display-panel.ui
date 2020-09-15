@@ -457,7 +457,7 @@
         <!-- Night Light page -->
         <child>
           <object class="CcNightLightPage" id="night_light_page">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
           </object>
           <packing>
             <property name="name">night-light</property>

@@ -86,6 +86,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="homogeneous">True</property>
                                 <property name="layout_style">expand</property>
+                                <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkRadioButton" id="config_type_single">
                                     <property name="label" translatable="yes">Single Display</property>
@@ -295,6 +296,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="layout_style">expand</property>
+                                        <property name="orientation">vertical</property>
                                         <child>
                                           <object class="GtkRadioButton" id="output_selection_two_first">
                                             <property name="visible">True</property>

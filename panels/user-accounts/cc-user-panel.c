@@ -857,7 +857,7 @@ show_user (ActUser *user, CcUserPanel *self)
 
         /* Autologin: show when local account */
         show = act_user_is_local_account (user);
-        gtk_widget_set_visible (GTK_WIDGET (self->autologin_row), show);
+        gtk_widget_set_visible (GTK_WIDGET (self->autologin_row), FALSE);
 
         /* Language: do not show for current user */
         show = act_user_get_uid (user) != getuid();

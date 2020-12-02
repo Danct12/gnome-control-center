@@ -591,7 +591,6 @@ cc_wwan_data_update_apn (CcWwanData    *self,
 
   g_object_set (setting,
                 NM_SETTING_GSM_NUMBER, "*99#",
-                NM_SETTING_GSM_NETWORK_ID, self->operator_code,
                 NM_SETTING_GSM_HOME_ONLY, self->home_only,
                 NULL);
 
